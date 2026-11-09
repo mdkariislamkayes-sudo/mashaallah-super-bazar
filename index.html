@@ -23,6 +23,25 @@
             position: relative;
         }
 
+        /* 🔄 লোডিং স্পিনার অ্যানিমেশন স্টাইল */
+        #loadingSpinnerContainer {
+            text-align: center;
+            padding: 40px;
+        }
+        .spinner {
+            width: 45px;
+            height: 45px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #27ae60;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+            margin: 0 auto 15px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .main-header-flex {
             display: flex;
             align-items: center;
@@ -115,7 +134,6 @@
             position: relative;
             text-shadow: 1px 2px 4px rgba(0,0,0,0.1);
         }
-        
         .section-title::after {
             content: '';
             display: block;
@@ -153,13 +171,11 @@
             color: #2c3e50;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         .menu-action-btn:hover, .menu-action-btn.active {
             background: linear-gradient(135deg, #27ae60, #219653);
             color: white;
             border-color: transparent;
-            box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
         }
 
         .admin-section-content {
@@ -194,17 +210,11 @@
             font-size: 16px;
             outline: none;
         }
-        input:focus {
-            border-color: #27ae60;
-        }
+        input:focus { border-color: #27ae60; }
 
-        .customer-shop-section {
-            display: block;
-        }
+        .customer-shop-section { display: block; }
 
-        .search-box {
-            margin-bottom: 15px;
-        }
+        .search-box { margin-bottom: 15px; }
         .search-box input {
             width: 100%;
             padding: 14px 20px;
@@ -213,14 +223,8 @@
             font-size: 16px;
             box-sizing: border-box;
             background: #fafbfc;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-            transition: all 0.3s ease;
         }
-        .search-box input:focus {
-            border-color: #27ae60;
-            background: #fff;
-            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.15);
-        }
+        .search-box input:focus { border-color: #27ae60; background: #fff; }
 
         .category-filters {
             display: flex;
@@ -238,13 +242,11 @@
             font-weight: 600;
             color: #2c3e50;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
         .filter-btn:hover, .filter-btn.active {
             background: linear-gradient(135deg, #27ae60, #219653);
             color: white;
             border-color: transparent;
-            box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3);
         }
 
         .image-upload-flex-container {
@@ -266,11 +268,6 @@
             font-size: 32px;
             color: #27ae60;
             cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .upload-plus-btn:hover {
-            background: #e8f8f5;
-            border-color: #219653;
         }
         .preview-thumb-box {
             position: relative;
@@ -300,19 +297,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        
-        button[type="submit"] {
-            padding: 14px;
-            background: linear-gradient(135deg, #27ae60, #219653);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
         }
 
         #product-grid {
@@ -369,12 +353,13 @@
             box-shadow: 0 -4px 15px rgba(0,0,0,0.2);
             z-index: 900;
             box-sizing: border-box;
-            gap: 10px;
         }
         .bottom-action-buttons {
             display: flex;
             gap: 8px;
             align-items: center;
+            width: 100%;
+            justify-content: space-around;
         }
         .floating-cart-bar button {
             background: linear-gradient(135deg, #27ae60, #219653);
@@ -385,7 +370,6 @@
             font-weight: bold;
             font-size: 13px;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
         .gear-icon-btn {
             background: #34495e !important;
@@ -405,18 +389,13 @@
             padding: 10px;
             text-align: center;
         }
-        .admin-table th {
-            background-color: #f2f2f2;
-            color: #2c3e50;
-        }
+        .admin-table th { background-color: #f2f2f2; color: #2c3e50; }
 
         .modal-overlay {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.65);
             backdrop-filter: blur(4px);
             z-index: 1000;
@@ -438,8 +417,7 @@
         }
         .close-modal-btn {
             position: absolute;
-            top: 12px;
-            right: 18px;
+            top: 12px; right: 18px;
             font-size: 26px;
             font-weight: bold;
             color: #aaa;
@@ -450,23 +428,13 @@
         .close-modal-btn:hover { color: #e74c3c; }
 
         .modal-body img {
-            width: 100%;
-            height: 240px;
+            width: 100%; height: 240px;
             object-fit: cover;
             border-radius: 10px;
             margin-bottom: 15px;
         }
-        .modal-body h2 {
-            margin: 0 0 12px 0;
-            text-align: left;
-            color: #2c3e50;
-            font-size: 22px;
-        }
-        .modal-body p {
-            margin: 8px 0;
-            color: #555;
-            font-size: 15px;
-        }
+        .modal-body h2 { margin: 0 0 12px 0; color: #2c3e50; font-size: 22px; }
+        .modal-body p { margin: 8px 0; color: #555; font-size: 15px; }
         .stock-badge {
             display: inline-block;
             padding: 5px 12px;
@@ -478,28 +446,15 @@
         .in-stock { background-color: #e8f8f5; color: #27ae60; }
         .out-of-stock { background-color: #fde8e8; color: #e74c3c; }
 
-        .modal-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 25px;
-        }
+        .modal-actions { display: flex; gap: 12px; margin-top: 25px; }
         .modal-actions button {
-            flex: 1;
-            padding: 13px;
-            border: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: bold;
+            flex: 1; padding: 13px;
+            border: none; border-radius: 8px;
+            font-size: 15px; font-weight: bold;
             cursor: pointer;
         }
-        .btn-add-cart {
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: white;
-        }
-        .btn-order-now {
-            background: linear-gradient(135deg, #27ae60, #219653);
-            color: white;
-        }
+        .btn-add-cart { background: linear-gradient(135deg, #3498db, #2980b9); color: white; }
+        .btn-order-now { background: linear-gradient(135deg, #27ae60, #219653); color: white; }
 
         .cart-item {
             display: flex;
@@ -509,98 +464,30 @@
             padding: 12px 0;
             gap: 10px;
         }
-        .cart-item img {
-            width: 55px;
-            height: 55px;
-            object-fit: cover;
-            border-radius: 6px;
-        }
-        .cart-item-details {
-            flex: 1;
-        }
-        .cart-item-details h4 {
-            margin: 0 0 4px 0;
-            font-size: 15px;
-            color: #2c3e50;
-        }
-        .cart-item-details p {
-            margin: 0;
-            color: #27ae60;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        .quantity-control {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 5px;
-        }
+        .cart-item img { width: 55px; height: 55px; object-fit: cover; border-radius: 6px; }
+        .cart-item-details { flex: 1; }
+        .cart-item-details h4 { margin: 0 0 4px 0; font-size: 15px; color: #2c3e50; }
+        .cart-item-details p { margin: 0; color: #27ae60; font-weight: bold; font-size: 14px; }
+        .quantity-control { display: flex; align-items: center; gap: 8px; margin-top: 5px; }
         .qty-btn {
-            background: #f1f3f5;
-            border: 1px solid #ccc;
-            width: 26px;
-            height: 26px;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .qty-btn:hover {
-            background: #27ae60;
-            color: white;
-            border-color: #27ae60;
+            background: #f1f3f5; border: 1px solid #ccc;
+            width: 26px; height: 26px; border-radius: 4px;
+            font-weight: bold; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
         }
         .remove-cart-item {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 6px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
+            background: #e74c3c; color: white; border: none;
+            padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 12px;
         }
 
         .secret-trigger {
-            margin-top: 50px;
-            text-align: center;
-            font-size: 12px;
-            color: #bdc3c7;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        @media print {
-            body * {
-                visibility: hidden !important;
-            }
-            #thermalReceiptPrintArea, #thermalReceiptPrintArea * {
-                visibility: visible !important;
-            }
-            #thermalReceiptPrintArea {
-                position: absolute !important;
-                left: 0 !important;
-                top: 0 !important;
-                width: 58mm !important;
-                font-family: 'Courier New', Courier, monospace !important;
-                font-size: 14px !important;
-                font-weight: bold !important;
-                color: #000 !important;
-                padding: 5px !important;
-                background: #fff !important;
-                display: block !important;
-                line-height: 1.6 !important;
-            }
+            margin-top: 50px; text-align: center;
+            font-size: 12px; color: #bdc3c7; cursor: pointer; user-select: none;
         }
 
         @media(max-width: 768px) {
-            .main-header-flex {
-                flex-direction: column;
-            }
-            .header-auth-box {
-                width: 100%;
-            }
+            .main-header-flex { flex-direction: column; }
+            .header-auth-box { width: 100%; }
         }
     </style>
 </head>
@@ -658,7 +545,6 @@
                     </select>
 
                     <label data-en="Product Images (Multiple):" data-bn="পণ্যের ছবি (একাধিক ছবি):">পণ্যের ছবি (একাধিক ছবি):</label>
-                    
                     <div class="image-upload-flex-container" id="imagePreviewListContainer">
                         <label for="productImage" class="upload-plus-btn" title="ছবি যোগ করুন">+</label>
                         <input type="file" id="productImage" accept="image/*" multiple style="display: none;">
@@ -748,7 +634,12 @@
                 <button class="filter-btn" onclick="filterByCategory('Healthcare', this)" data-en="Healthcare" data-bn="হেলথ কেয়ার">হেলথ কেয়ার</button>
             </div>
 
-            <div id="product-grid"></div>
+            <!-- 🔄 লোডিং স্পিনার ও প্রোডাক্ট গ্রিড -->
+            <div id="loadingSpinnerContainer">
+                <div class="spinner"></div>
+                <p style="color: #666; font-size: 14px; font-weight: 500;" data-en="Loading products..." data-bn="পণ্যগুলো লোড হচ্ছে...">পণ্যগুলো লোড হচ্ছে...</p>
+            </div>
+            <div id="product-grid" style="display: none;"></div>
         </div>
 
         <!-- 🛒 ২. আলাদা কার্ট পেজ -->
@@ -775,7 +666,7 @@
 
     <!-- 🛒 নিচের ফিক্সড নেভিগেশন ও কার্ট বার -->
     <div class="floating-cart-bar" id="floatingCartBar">
-        <div class="bottom-action-buttons" style="display: flex; gap: 6px; width: 100%; justify-content: space-around;">
+        <div class="bottom-action-buttons">
             <button onclick="switchPage('shop')" style="background: #34495e;" data-en="🏠 Home" data-bn="🏠 হোম">🏠 হোম</button>
             <button onclick="switchPage('cart')" data-en="🛒 Cart (<span id='cartCount'>0</span>)" data-bn="🛒 কার্ট (<span id='cartCountBn'>0</span>)">🛒 কার্ট (০)</button>
             <button onclick="switchPage('orders')" data-en="📦 My Orders" data-bn="📦 আমার অর্ডার">📦 আমার অর্ডার</button>
@@ -787,7 +678,7 @@
     <div class="modal-overlay" id="storeSettingsModal">
         <div class="modal-content" style="max-width: 380px;">
             <button class="close-modal-btn" onclick="closeStoreSettings()">&times;</button>
-            <h3 id="settingsTitle" style="color: #2c3e50; margin-top: 0; text-align: center; cursor: pointer;" title="Info">মাশাআল্লাহ সুপার বাজার</h3>
+            <h3 id="settingsTitle" style="color: #2c3e50; margin-top: 0; text-align: center; cursor: pointer;">মাশাআল্লাহ সুপার বাজার</h3>
             <p style="color: #666; font-size: 14px; line-height: 1.5; text-align: center;" data-en="Smart Shopping, Smart Life. Best service for everyone." data-bn="স্মার্ট শপিং, স্মার্ট জীবন। সবার জন্য সেরা সেবা।">স্মার্ট শপিং, স্মার্ট জীবন। সবার জন্য সেরা সেবা।</p>
             
             <div style="margin: 15px 0; text-align: center;">
@@ -863,9 +754,8 @@
             <button class="close-modal-btn" onclick="closeProfileImageModal()">&times;</button>
             <h3 style="color: #2c3e50; margin-top:0;" data-en="Add Profile Picture" data-bn="প্রোফাইলে ছবি অ্যাড করুন">প্রোফাইলে ছবি অ্যাড করুন</h3>
             <p style="color: #666; font-size: 14px;" data-en="Choose a photo for your profile" data-bn="আপনার প্রোফাইলের জন্য একটি ছবি চয়ন করুন">আপনার প্রোফাইলের জন্য একটি ছবি চয়ন করুন</p>
-            
             <div style="margin: 20px 0;">
-                <label for="profileImageFileInput" class="custom-file-btn" data-en="Select Photo 📁" data-bn="ছবি বেছে নিন 📁">ছবি বেছে নিন 📁</label>
+                <label for="profileImageFileInput" class="auth-action-btn" style="display:inline-block; padding: 10px 20px;" data-en="Select Photo 📁" data-bn="ছবি বেছে নিন 📁">ছবি বেছে নিন 📁</label>
                 <input type="file" id="profileImageFileInput" accept="image/*" style="display: none;" onchange="handleProfileImageUpload(event)">
             </div>
         </div>
@@ -926,7 +816,6 @@
             <button class="close-modal-btn" onclick="closeCheckoutModal()">&times;</button>
             <h3 style="color: #2c3e50; margin-top:0;" data-en="Checkout & Payment 💳" data-bn="চেকআউট ও পেমেন্ট 💳">চেকআউট ও পেমেন্ট 💳</h3>
             <form id="checkoutForm" onsubmit="submitFinalOrder(event)">
-                
                 <label data-en="Select Payment Method:" data-bn="পেমেন্ট মাধ্যম বেছে নিন:">পেমেন্ট মাধ্যম বেছে নিন:</label>
                 <div style="display: flex; gap: 15px; margin-bottom: 10px;">
                     <label><input type="radio" name="paymentMethod" value="bKash/Nagad" checked onchange="togglePaymentFields()"> বিকাশ/নগদ (Personal)</label>
@@ -965,6 +854,7 @@
     <script>
         const form = document.getElementById('productForm');
         const productGrid = document.getElementById('product-grid');
+        const loadingSpinnerContainer = document.getElementById('loadingSpinnerContainer');
         const imageInput = document.getElementById('productImage');
         const imagePreviewListContainer = document.getElementById('imagePreviewListContainer');
         const searchInput = document.getElementById('searchInput');
@@ -989,7 +879,14 @@
         let currentLang = localStorage.getItem('siteLang') || 'bn';
         let cart = currentUser ? (JSON.parse(localStorage.getItem('cart_' + currentUser.email)) || []) : [];
         let orders = [];
-        let globalProducts = [];
+        
+        // 🚀 ইনস্ট্যান্ট লোকাল ক্যাশ থেকে প্রথম ডেট লোড করা (যাতে পেজ ফাঁকা না থাকে)
+        let globalProducts = JSON.parse(localStorage.getItem('cached_products')) || [];
+        if (globalProducts.length > 0) {
+            loadingSpinnerContainer.style.display = 'none';
+            productGrid.style.display = 'grid';
+            renderProductsToDOM(globalProducts, '');
+        }
 
         let isRegisterMode = false;
         let pendingOrderType = 'cart';
@@ -1101,16 +998,13 @@
             const name = isRegisterMode ? document.getElementById('userName').value.trim() : '';
             const phone = isRegisterMode ? document.getElementById('userPhone').value.trim() : '';
             const address = isRegisterMode ? document.getElementById('userAddress').value.trim() : '';
-
             const userKey = email.replace(/[.#$\/\[\]]/g, "_");
 
             if (isRegisterMode) {
                 let userData = { name, email, password, phone, address, profileImg: '', createdAt: new Date().toLocaleDateString() };
-                
                 if (window.db && window.databaseRef && window.set) {
                     window.set(window.databaseRef(window.db, 'users/' + userKey), userData).catch((err) => console.log(err));
                 }
-
                 localStorage.setItem('user_' + userKey, JSON.stringify(userData));
                 currentUser = { name, email, password, phone, address, profileImg: '' };
                 localStorage.setItem('currentUser', JSON.stringify(currentUser));
@@ -1129,7 +1023,6 @@
                         currentUser = { name: parsedData.name || 'Valued Customer', email: parsedData.email, password: parsedData.password, phone: parsedData.phone || 'N/A', address: parsedData.address || 'N/A', profileImg: parsedData.profileImg || '' };
                         localStorage.setItem('currentUser', JSON.stringify(currentUser));
                         cart = JSON.parse(localStorage.getItem('cart_' + email)) || [];
-
                         alert(currentLang === 'en' ? "Successfully logged in! ✓" : "সফলভাবে লগইন হয়েছে! ✓");
                         closeAuthModal();
                         updateAuthUI();
@@ -1147,7 +1040,6 @@
                                 currentUser = { name: data.name || 'Valued Customer', email: data.email, password: data.password, phone: data.phone || 'N/A', address: data.address || 'N/A', profileImg: data.profileImg || '' };
                                 localStorage.setItem('currentUser', JSON.stringify(currentUser));
                                 cart = JSON.parse(localStorage.getItem('cart_' + email)) || [];
-
                                 alert(currentLang === 'en' ? "Successfully logged in! ✓" : "সফলভাবে লগইন হয়েছে! ✓");
                                 closeAuthModal();
                                 updateAuthUI();
@@ -1212,13 +1104,8 @@
             }
         }
 
-        function openProfileImageModal() {
-            document.getElementById('profileImageModal').style.display = 'flex';
-        }
-
-        function closeProfileImageModal() {
-            document.getElementById('profileImageModal').style.display = 'none';
-        }
+        function openProfileImageModal() { document.getElementById('profileImageModal').style.display = 'flex'; }
+        function closeProfileImageModal() { document.getElementById('profileImageModal').style.display = 'none'; }
 
         function handleProfileImageUpload(e) {
             const file = e.target.files[0];
@@ -1228,16 +1115,13 @@
                     const base64Img = event.target.result;
                     currentUser.profileImg = base64Img;
                     localStorage.setItem('currentUser', JSON.stringify(currentUser));
-
                     let userKey = currentUser.email.replace(/[.#$\/\[\]]/g, "_");
                     let localUserData = JSON.parse(localStorage.getItem('user_' + userKey)) || {};
                     localUserData.profileImg = base64Img;
                     localStorage.setItem('user_' + userKey, JSON.stringify(localUserData));
-
                     if (window.db && window.databaseRef && window.set) {
                         window.set(window.databaseRef(window.db, 'users/' + userKey + '/profileImg'), base64Img);
                     }
-
                     closeProfileImageModal();
                     updateAuthUI();
                     alert(currentLang === 'en' ? "Profile picture updated successfully!" : "প্রোফাইল ছবি সফলভাবে আপডেট করা হয়েছে!");
@@ -1251,26 +1135,20 @@
             document.getElementById('newNameInput').value = currentUser.name || '';
             document.getElementById('updateNameModal').style.display = 'flex';
         }
-
-        function closeUpdateNameModal() {
-            document.getElementById('updateNameModal').style.display = 'none';
-        }
+        function closeUpdateNameModal() { document.getElementById('updateNameModal').style.display = 'none'; }
 
         function handleUpdateName(e) {
             e.preventDefault();
             const newName = document.getElementById('newNameInput').value.trim();
             currentUser.name = newName;
             localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            
             let userKey = currentUser.email.replace(/[.#$\/\[\]]/g, "_");
             let localUserData = JSON.parse(localStorage.getItem('user_' + userKey)) || {};
             localUserData.name = newName;
             localStorage.setItem('user_' + userKey, JSON.stringify(localUserData));
-
             if (window.db && window.databaseRef && window.set) {
                 window.set(window.databaseRef(window.db, 'users/' + userKey + '/name'), newName);
             }
-
             alert(currentLang === 'en' ? "Name updated successfully!" : "নাম সফলভাবে আপডেট করা হয়েছে!");
             closeUpdateNameModal();
             updateAuthUI();
@@ -1281,26 +1159,20 @@
             document.getElementById('newPhoneInput').value = currentUser.phone || '';
             document.getElementById('updatePhoneModal').style.display = 'flex';
         }
-
-        function closeUpdatePhoneModal() {
-            document.getElementById('updatePhoneModal').style.display = 'none';
-        }
+        function closeUpdatePhoneModal() { document.getElementById('updatePhoneModal').style.display = 'none'; }
 
         function handleUpdatePhone(e) {
             e.preventDefault();
             const newPhone = document.getElementById('newPhoneInput').value.trim();
             currentUser.phone = newPhone;
             localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            
             let userKey = currentUser.email.replace(/[.#$\/\[\]]/g, "_");
             let localUserData = JSON.parse(localStorage.getItem('user_' + userKey)) || {};
             localUserData.phone = newPhone;
             localStorage.setItem('user_' + userKey, JSON.stringify(localUserData));
-
             if (window.db && window.databaseRef && window.set) {
                 window.set(window.databaseRef(window.db, 'users/' + userKey + '/phone'), newPhone);
             }
-
             alert(currentLang === 'en' ? "Phone number updated successfully!" : "ফোন নম্বর সফলভাবে আপডেট করা হয়েছে!");
             closeUpdatePhoneModal();
             updateAuthUI();
@@ -1311,26 +1183,20 @@
             document.getElementById('newAddress').value = currentUser.address || '';
             document.getElementById('updateAddressModal').style.display = 'flex';
         }
-
-        function closeUpdateAddressModal() {
-            document.getElementById('updateAddressModal').style.display = 'none';
-        }
+        function closeUpdateAddressModal() { document.getElementById('updateAddressModal').style.display = 'none'; }
 
         function handleUpdateAddress(e) {
             e.preventDefault();
             const newAddr = document.getElementById('newAddress').value.trim();
             currentUser.address = newAddr;
             localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            
             let userKey = currentUser.email.replace(/[.#$\/\[\]]/g, "_");
             let localUserData = JSON.parse(localStorage.getItem('user_' + userKey)) || {};
             localUserData.address = newAddr;
             localStorage.setItem('user_' + userKey, JSON.stringify(localUserData));
-
             if (window.db && window.databaseRef && window.set) {
                 window.set(window.databaseRef(window.db, 'users/' + userKey + '/address'), newAddr);
             }
-
             alert(currentLang === 'en' ? "Address updated successfully!" : "ঠিকানা সফলভাবে আপডেট করা হয়েছে!");
             closeUpdateAddressModal();
             updateAuthUI();
@@ -1340,26 +1206,20 @@
             closeStoreSettings();
             document.getElementById('updatePasswordModal').style.display = 'flex';
         }
-
-        function closeUpdatePasswordModal() {
-            document.getElementById('updatePasswordModal').style.display = 'none';
-        }
+        function closeUpdatePasswordModal() { document.getElementById('updatePasswordModal').style.display = 'none'; }
 
         function handleUpdatePassword(e) {
             e.preventDefault();
             const newPass = document.getElementById('newPasswordInput').value.trim();
             currentUser.password = newPass;
             localStorage.setItem('currentUser', JSON.stringify(currentUser));
-
             let userKey = currentUser.email.replace(/[.#$\/\[\]]/g, "_");
             let localUserData = JSON.parse(localStorage.getItem('user_' + userKey)) || {};
             localUserData.password = newPass;
             localStorage.setItem('user_' + userKey, JSON.stringify(localUserData));
-
             if (window.db && window.databaseRef && window.set) {
                 window.set(window.databaseRef(window.db, 'users/' + userKey + '/password'), newPass);
             }
-
             alert(currentLang === 'en' ? "Password changed successfully!" : "পাসওয়ার্ড সফলভাবে পরিবর্তন করা হয়েছে!");
             closeUpdatePasswordModal();
         }
@@ -1406,9 +1266,7 @@
             document.getElementById('checkoutModal').style.display = 'flex';
         }
 
-        function closeCheckoutModal() {
-            document.getElementById('checkoutModal').style.display = 'none';
-        }
+        function closeCheckoutModal() { document.getElementById('checkoutModal').style.display = 'none'; }
 
         function submitFinalOrder(e) {
             e.preventDefault();
@@ -1454,7 +1312,6 @@
             }
 
             let productDetailsText = itemsToOrder.map(i => `• ${i.name} - ${i.quantity} pcs (৳${i.price * i.quantity})`).join('\n');
-
             let whatsappMsg = `🛍️ *নতুন অর্ডার - মাশাআল্লাহ সুপার বাজার*\n\n` +
                               `👤 নাম: ${customerName}\n` +
                               `📞 ফোন: ${verifiedPhone}\n` +
@@ -1501,7 +1358,6 @@
                             let html = `<div style="display: flex; flex-direction: column; gap: 15px;">`;
                             myOrders.forEach((ord, idx) => {
                                 let isCompleted = ord.status === 'Delivered' || ord.status === 'ডেলিভারি সম্পন্ন';
-                                
                                 let itemsListHtml = ord.items.map(i => `
                                     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
                                         <img src="${i.imgSrc}" style="width: 45px; height: 45px; object-fit: cover; border-radius: 6px; border: 1px solid #ddd;">
@@ -1511,7 +1367,7 @@
 
                                 html += `
                                     <div style="background: #fdfefe; border: 2px solid #27ae60; padding: 18px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-                                        <p style="margin: 0 0 8px 0; font-size: 16px; color: #2c3e50;"><strong>#${currentLang === 'en' ? 'Order' : 'অর্ডার'} #${idx + 101}</strong> <span style="font-size: 13px; color: #777;">(${ord.date || ''})</span></p>
+                                        <p style="margin: 0 0 8px 0; font-size: 16px; color: #2c3e50;"><strong>${currentLang === 'en' ? 'Order' : 'অর্ডার'} #${idx + 101}</strong> <span style="font-size: 13px; color: #777;">(${ord.date || ''})</span></p>
                                         <div style="margin: 10px 0;"><strong>${currentLang === 'en' ? 'Products:' : 'পণ্যের বিবরণ ও ছবি:'}</strong><br>${itemsListHtml}</div>
                                         <p style="margin: 8px 0; color: #27ae60; font-weight: bold; font-size: 16px;">${currentLang === 'en' ? 'Total:' : 'মোট দাম:'} ৳ ${ord.total}</p>
                                         <p style="margin: 0 0 12px 0;"><strong>${currentLang === 'en' ? 'Status:' : 'স্ট্যাটাস:'}</strong> <span style="color: ${isCompleted ? '#27ae60' : '#e67e22'}; font-weight: bold;">${ord.status}</span></p>
@@ -1584,13 +1440,8 @@
             }
         }
 
-        function handleGearClick() {
-            storeSettingsModal.style.display = 'flex';
-        }
-
-        function closeStoreSettings() {
-            storeSettingsModal.style.display = 'none';
-        }
+        function handleGearClick() { storeSettingsModal.style.display = 'flex'; }
+        function closeStoreSettings() { storeSettingsModal.style.display = 'none'; }
 
         let titleClickCount = 0;
         settingsTitle.addEventListener('click', function() {
@@ -1681,6 +1532,7 @@
             renderProductsToDOM(globalProducts, searchInput.value);
         }
 
+        // 🔄 ফায়ারবেস থেকে রিয়েলটাইম ডেটা লোড এবং লোকাল ক্যাশ আপডেট
         function loadProductsRealtime() {
             if (window.db && window.databaseRef && window.onValue) {
                 window.onValue(window.databaseRef(window.db, 'products'), (snapshot) => {
@@ -1691,18 +1543,25 @@
                             globalProducts.push({ ...data[key], firebaseKey: key });
                         });
                     }
+                    // লোকাল ড্রাইভে ক্যাশ সেভ করে রাখা
+                    localStorage.setItem('cached_products', JSON.stringify(globalProducts));
+                    
+                    // লোডিং স্পিনার লুকিয়ে প্রোডাক্ট গ্রিড দেখানো
+                    loadingSpinnerContainer.style.display = 'none';
+                    productGrid.style.display = 'grid';
                     renderProductsToDOM(globalProducts, searchInput.value);
                 });
             } else {
-                let saved = JSON.parse(localStorage.getItem('products')) || [];
+                let saved = JSON.parse(localStorage.getItem('cached_products')) || [];
                 globalProducts = saved;
+                loadingSpinnerContainer.style.display = 'none';
+                productGrid.style.display = 'grid';
                 renderProductsToDOM(globalProducts, searchInput.value);
             }
         }
 
         function renderProductsToDOM(productsList, filterText = '') {
             productGrid.innerHTML = '';
-            
             let filtered = productsList.filter(product => {
                 const searchString = `${product.name} ${product.material} ${product.price}`.toLowerCase();
                 let matchesCategory = selectedCategory === 'all' || product.material === selectedCategory;
@@ -1718,7 +1577,6 @@
             filtered.forEach((product) => {
                 const card = document.createElement('div');
                 card.className = 'product-card';
-                
                 card.onclick = function(e) {
                     if(!e.target.classList.contains('delete-btn')) {
                         openProductModal(product);
@@ -1735,7 +1593,6 @@
                     <div class="price-tag">৳ ${product.price}</div>
                     <div style="margin-top: 5px;">${stockText}</div>
                 `;
-                
                 productGrid.appendChild(card);
             });
         }
@@ -1760,7 +1617,6 @@
                 <label for="productImage" class="upload-plus-btn" title="ছবি যোগ করুন">+</label>
                 <input type="file" id="productImage" accept="image/*" multiple style="display: none;" onchange="handleFileSelect(this)">
             `;
-
             uploadedProductImages.forEach((imgSrc, index) => {
                 const thumbBox = document.createElement('div');
                 thumbBox.className = 'preview-thumb-box';
@@ -1794,7 +1650,6 @@
         function loadAdminStockTable() {
             const tbody = document.getElementById('adminStockTableBody');
             tbody.innerHTML = '';
-            
             if(globalProducts.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="7" style="color: #7f8c8d;">${currentLang === 'en' ? 'No products found!' : 'কোনো পণ্য পাওয়া যায়নি!'}</td></tr>`;
                 return;
@@ -1869,12 +1724,9 @@
                 window.get(window.child(window.databaseRef(window.db), 'orders')).then((snapshot) => {
                     tbody.innerHTML = '';
                     orders = [];
-
                     if (snapshot.exists()) {
                         let ordersData = snapshot.val();
-                        let orderKeys = Object.keys(ordersData);
-
-                        orderKeys.forEach((key, index) => {
+                        Object.keys(ordersData).forEach((key, index) => {
                             let order = ordersData[key];
                             order.firebaseKey = key;
                             orders.push(order);
@@ -1916,7 +1768,6 @@
                                             <button onclick="shareThermalReceipt('${key}')" style="background: #2980b9; color: white; border: none; padding: 6px 8px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px;" title="Share Receipt">🔗</button>
                                         </div>
                                         ${!isDelivered ? `<button onclick="markDeliveredFromFirebase('${key}')" style="background: #27ae60; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px;">${currentLang === 'en' ? 'Deliver ✓' : 'ডেলিভারি দিন ✓'}</button>` : `<span style="color: #27ae60; font-weight: bold; font-size: 12px;">${currentLang === 'en' ? 'Completed' : 'সম্পন্ন'}</span>`}
-                                        
                                         <button onclick="deleteOrderFromFirebase('${key}')" ${!isDelivered ? 'disabled style="background: #bdc3c7; color: #7f8c8d; border: none; padding: 5px 10px; border-radius: 4px; cursor: not-allowed; font-size: 12px;"' : 'style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px;"'}>
                                             ${currentLang === 'en' ? 'Delete 🗑️' : 'ডিলিট 🗑️'}
                                         </button>
@@ -1929,18 +1780,13 @@
                     } else {
                         tbody.innerHTML = `<tr><td colspan="6" style="color: #7f8c8d;">${currentLang === 'en' ? 'No new orders yet!' : 'এখনো কোনো নতুন অর্ডার আসেনি!'}</td></tr>`;
                     }
-                }).catch(() => {
-                    tbody.innerHTML = `<tr><td colspan="6" style="color: #e74c3c;">${currentLang === 'en' ? 'Failed to load data!' : 'ডেটা লোড করতে সমস্যা হয়েছে!'}</td></tr>`;
                 });
-            } else {
-                tbody.innerHTML = `<tr><td colspan="6" style="color: #e74c3c;">${currentLang === 'en' ? 'Firebase connection not found!' : 'ফায়ারবেস কানেকশন পাওয়া যায়নি!'}</td></tr>`;
             }
         }
 
         window.printThermalReceipt = function(firebaseKey) {
             let order = orders.find(o => o.firebaseKey === firebaseKey);
             if (!order) return;
-
             let printArea = document.getElementById('thermalReceiptPrintArea');
             let itemsRows = order.items.map(i => `
                 <div style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
@@ -1971,22 +1817,16 @@
                     Thank you for shopping!
                 </div>
             `;
-
             window.print();
         }
 
         window.shareThermalReceipt = function(firebaseKey) {
             let order = orders.find(o => o.firebaseKey === firebaseKey);
             if (!order) return;
-
             let itemsText = order.items.map(i => `${i.name} (${i.quantity} pcs) - ৳${i.price * i.quantity}`).join(', ');
             let shareText = `--- MASHAALLAH SUPER BAZAR ---\nDate: ${order.date || 'N/A'}\nCustomer: ${order.customerName}\nPhone: ${order.phone}\nAddress: ${order.address}\nItems: ${itemsText}\nTotal: ৳${order.total}\nPayment: ${order.paymentMethod}\nThank you!`;
-
             if (navigator.share) {
-                navigator.share({
-                    title: 'Order Receipt',
-                    text: shareText
-                }).catch((err) => console.log('Share canceled', err));
+                navigator.share({ title: 'Order Receipt', text: shareText }).catch((err) => console.log('Share canceled', err));
             } else {
                 navigator.clipboard.writeText(shareText);
                 alert(currentLang === 'en' ? "Receipt copied to clipboard for sharing!" : "শেয়ার করার জন্য রসিদের তথ্য কপি করা হয়েছে!");
@@ -1996,40 +1836,30 @@
         window.markDeliveredFromFirebase = function(firebaseKey) {
             let statusVal = currentLang === 'en' ? 'Delivered' : 'ডেলিভারি সম্পন্ন';
             if (window.db && window.databaseRef && window.set) {
-                window.set(window.databaseRef(window.db, 'orders/' + firebaseKey + '/status'), statusVal)
-                    .then(() => {
-                        alert(currentLang === 'en' ? "Order marked as delivered!" : "অর্ডারটি সফলভাবে ডেলিভারি হিসেবে আপডেট করা হয়েছে!");
-                        loadAdminOrdersTable();
-                        loadAdminStockTable();
-                    })
-                    .catch(() => {
-                        alert(currentLang === 'en' ? "Failed to update status!" : "স্ট্যাটাস আপডেট করতে সমস্যা হয়েছে!");
-                    });
+                window.set(window.databaseRef(window.db, 'orders/' + firebaseKey + '/status'), statusVal).then(() => {
+                    alert(currentLang === 'en' ? "Order marked as delivered!" : "অর্ডারটি সফলভাবে ডেলিভারি হিসেবে আপডেট করা হয়েছে!");
+                    loadAdminOrdersTable();
+                    loadAdminStockTable();
+                });
             }
         }
 
         window.deleteOrderFromFirebase = function(firebaseKey) {
             let order = orders.find(o => o.firebaseKey === firebaseKey);
             if (!order) return;
-
             let isDelivered = order.status === 'Delivered' || order.status === 'ডেলিভারি সম্পন্ন';
             if (!isDelivered) {
                 alert(currentLang === 'en' ? "Cannot delete! Order must be delivered first." : "ডিলিট করা সম্ভব নয়! আগে অর্ডারটি ডেলিভারি সম্পন্ন করতে হবে।");
                 return;
             }
-
             if (confirm(currentLang === 'en' ? "Are you sure you want to delete this delivered order?" : "আপনি কি নিশ্চিতভাবে এই ডেলিভারি সম্পন্ন হওয়া অর্ডারটি মুছে ফেলতে চান?")) {
                 if (window.db && window.databaseRef && window.set) {
-                    window.set(window.databaseRef(window.db, 'orders/' + firebaseKey), null)
-                        .then(() => {
-                            alert(currentLang === 'en' ? "Order deleted successfully!" : "অর্ডারটি সফলভাবে মুছে ফেলা হয়েছে!");
-                            loadAdminOrdersTable();
-                            loadAdminStockTable();
-                            updateSalesAnalytics();
-                        })
-                        .catch(() => {
-                            alert(currentLang === 'en' ? "Failed to delete order!" : "অর্ডার ডিলিট করতে সমস্যা হয়েছে!");
-                        });
+                    window.set(window.databaseRef(window.db, 'orders/' + firebaseKey), null).then(() => {
+                        alert(currentLang === 'en' ? "Order deleted successfully!" : "অর্ডারটি সফলভাবে মুছে ফেলা হয়েছে!");
+                        loadAdminOrdersTable();
+                        loadAdminStockTable();
+                        updateSalesAnalytics();
+                    });
                 }
             }
         }
@@ -2046,13 +1876,12 @@
                                     updates[key] = null;
                                 }
                             });
-                            window.set(window.databaseRef(window.db, 'orders'), { ...ordersData, ...updates })
-                                .then(() => {
-                                    alert(currentLang === 'en' ? "Sales report reset successfully!" : "সেলস রিপোর্ট সফলভাবে রিসেট করা হয়েছে!");
-                                    loadAdminOrdersTable();
-                                    loadAdminStockTable();
-                                    updateSalesAnalytics();
-                                });
+                            window.set(window.databaseRef(window.db, 'orders'), { ...ordersData, ...updates }).then(() => {
+                                alert(currentLang === 'en' ? "Sales report reset successfully!" : "সেলস রিপোর্ট সফলভাবে রিসেট করা হয়েছে!");
+                                loadAdminOrdersTable();
+                                loadAdminStockTable();
+                                updateSalesAnalytics();
+                            });
                         }
                     });
                 }
@@ -2062,7 +1891,6 @@
         function updateSalesAnalytics() {
             let totalItems = 0;
             let totalRevenue = 0;
-
             if (window.db && window.databaseRef && window.get && window.child) {
                 window.get(window.child(window.databaseRef(window.db), 'orders')).then((snapshot) => {
                     if (snapshot.exists()) {
@@ -2098,9 +1926,7 @@
             productModal.style.display = 'flex';
         }
 
-        function closeModal() {
-            productModal.style.display = 'none';
-        }
+        function closeModal() { productModal.style.display = 'none'; }
 
         window.onclick = function(event) {
             if (event.target === productModal) closeModal();
@@ -2122,13 +1948,11 @@
                 let newItem = { ...currentSelectedProduct, quantity: 1, selected: true };
                 cart.push(newItem);
             }
-            
             if(currentUser) {
                 localStorage.setItem('cart_' + currentUser.email, JSON.stringify(cart));
             } else {
                 localStorage.setItem('cart', JSON.stringify(cart));
             }
-
             updateCartUI();
             alert(`"${currentSelectedProduct.name}" ` + (currentLang === 'en' ? "added to cart! 🛒" : "কার্টে যোগ করা হয়েছে! 🛒"));
             closeModal();
@@ -2154,10 +1978,7 @@
             let total = 0;
             cart.forEach((item, index) => {
                 if (item.selected === undefined) item.selected = true;
-
-                if (item.selected) {
-                    total += Number(item.price) * item.quantity;
-                }
+                if (item.selected) total += Number(item.price) * item.quantity;
 
                 const itemDiv = document.createElement('div');
                 itemDiv.className = 'cart-item';
@@ -2187,9 +2008,7 @@
 
         function changeQuantity(index, amount) {
             cart[index].quantity += amount;
-            if (cart[index].quantity <= 0) {
-                cart.splice(index, 1);
-            }
+            if (cart[index].quantity <= 0) cart.splice(index, 1);
             if(currentUser) {
                 localStorage.setItem('cart_' + currentUser.email, JSON.stringify(cart));
             } else {
@@ -2228,7 +2047,6 @@
 
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-
             const name = document.getElementById('pname').value;
             const price = document.getElementById('price').value;
             const material = document.getElementById('material').value;
@@ -2283,7 +2101,6 @@
       window.push = push;
       window.onValue = onValue;
 
-      // Automatically load products from database when connected
       if (typeof loadProductsRealtime === 'function') {
           loadProductsRealtime();
       }
