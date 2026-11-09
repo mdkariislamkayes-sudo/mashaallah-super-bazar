@@ -998,7 +998,6 @@
             applyLanguage();
             loadProductsForCustomer();
             updateCartUI();
-            loadAdminStockTable();
             updateSalesAnalytics();
             updateAuthUI();
             loadCustomerActiveOrders();
@@ -1456,7 +1455,6 @@
                 window.set(window.databaseRef(window.db, 'orders/' + newOrderRef.key), newOrder);
             }
 
-            // হোয়াটসঅ্যাপ মেসেজ ফিক্সড করা হলো (এখানে বেসসিক্স কোডের বদলে পণ্যের নাম, দাম ও পরিমাণ সুন্দরভাবে সাজানো হয়েছে)
             let productDetailsText = itemsToOrder.map(i => `• ${i.name} - ${i.quantity} pcs (৳${i.price * i.quantity})`).join('\n');
 
             let whatsappMsg = `🛍️ *নতুন অর্ডার - মাশাআল্লাহ সুপার বাজার*\n\n` +
@@ -1601,24 +1599,40 @@
             titleClickCount++;
             if (titleClickCount === 3) {
                 closeStoreSettings();
-                let savedPin = localStorage.getItem('adminPin') || '1234';
-                let enteredPin = prompt(currentLang === 'en' ? "Enter Admin PIN code:" : "অ্যাডমিন পিন কোড দিন:");
-                if (enteredPin === savedPin) {
-                    adminPanel.style.display = 'block';
-                    customerShopSection.style.display = 'none';
-                    cartPageSection.style.display = 'none';
-                    ordersPageSection.style.display = 'none';
-                    floatingCartBar.style.display = 'none';
-                    loadAdminStockTable();
-                    loadAdminOrdersTable();
-                    updateSalesAnalytics();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                } else if (enteredPin !== null) {
-                    alert(currentLang === 'en' ? "Wrong PIN code!" : "ভুল পিন কোড!");
+                
+                // ফায়ারবেস বা লোকাল স্টোরেজ থেকে অ্যাডমিন পিন চেক করা
+                if (window.db && window.databaseRef && window.get && window.child) {
+                    window.get(window.child(window.databaseRef(window.db), 'settings/adminPin')).then((snapshot) => {
+                        let savedPin = snapshot.exists() ? snapshot.val() : (localStorage.getItem('adminPin') || '1234');
+                        promptAdminPin(savedPin);
+                    }).catch(() => {
+                        let savedPin = localStorage.getItem('adminPin') || '1234';
+                        promptAdminPin(savedPin);
+                    });
+                } else {
+                    let savedPin = localStorage.getItem('adminPin') || '1234';
+                    promptAdminPin(savedPin);
                 }
                 titleClickCount = 0;
             }
         });
+
+        function promptAdminPin(savedPin) {
+            let enteredPin = prompt(currentLang === 'en' ? "Enter Admin PIN code:" : "অ্যাডমিন পিন কোড দিন:");
+            if (enteredPin === savedPin) {
+                adminPanel.style.display = 'block';
+                customerShopSection.style.display = 'none';
+                cartPageSection.style.display = 'none';
+                ordersPageSection.style.display = 'none';
+                floatingCartBar.style.display = 'none';
+                loadAdminStockTable();
+                loadAdminOrdersTable();
+                updateSalesAnalytics();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else if (enteredPin !== null) {
+                alert(currentLang === 'en' ? "Wrong PIN code!" : "ভুল পিন কোড!");
+            }
+        }
 
         function toggleAdminPanel() {
             if (adminPanel.style.display === 'block') {
@@ -1638,19 +1652,17 @@
         secretTrigger.addEventListener('click', function() {
             clickCount++;
             if (clickCount === 3) {
-                let savedPin = localStorage.getItem('adminPin') || '1234';
-                let enteredPin = prompt(currentLang === 'en' ? "Enter Admin PIN code:" : "অ্যাডমিন পিন কোড দিন:");
-                if (enteredPin === savedPin) {
-                    adminPanel.style.display = 'block';
-                    customerShopSection.style.display = 'none';
-                    cartPageSection.style.display = 'none';
-                    ordersPageSection.style.display = 'none';
-                    floatingCartBar.style.display = 'none';
-                    loadAdminStockTable();
-                    loadAdminOrdersTable();
-                    updateSalesAnalytics();
-                } else if (enteredPin !== null) {
-                    alert(currentLang === 'en' ? "Wrong PIN code!" : "ভুল পিন কোড!");
+                if (window.db && window.databaseRef && window.get && window.child) {
+                    window.get(window.child(window.databaseRef(window.db), 'settings/adminPin')).then((snapshot) => {
+                        let savedPin = snapshot.exists() ? snapshot.val() : (localStorage.getItem('adminPin') || '1234');
+                        promptAdminPin(savedPin);
+                    }).catch(() => {
+                        let savedPin = localStorage.getItem('adminPin') || '1234';
+                        promptAdminPin(savedPin);
+                    });
+                } else {
+                    let savedPin = localStorage.getItem('adminPin') || '1234';
+                    promptAdminPin(savedPin);
                 }
                 clickCount = 0;
             }
@@ -1661,8 +1673,15 @@
             let newPin = document.getElementById('newPin').value;
             if (newPin.trim() !== '') {
                 localStorage.setItem('adminPin', newPin);
-                alert(currentLang === 'en' ? "Admin PIN updated successfully!" : "অ্যাডমিন পিন সফলভাবে পরিবর্তন করা হয়েছে!");
-                document.getElementById('pinForm').reset();
+                if (window.db && window.databaseRef && window.set) {
+                    window.set(window.databaseRef(window.db, 'settings/adminPin'), newPin).then(() => {
+                        alert(currentLang === 'en' ? "Admin PIN updated successfully!" : "অ্যাডমিন পিন সফলভাবে পরিবর্তন করা হয়েছে!");
+                        document.getElementById('pinForm').reset();
+                    });
+                } else {
+                    alert(currentLang === 'en' ? "Admin PIN updated successfully!" : "অ্যাডমিন পিন সফলভাবে পরিবর্তন করা হয়েছে!");
+                    document.getElementById('pinForm').reset();
+                }
             }
         }
 
@@ -1673,19 +1692,29 @@
             loadProductsForCustomer(searchInput.value);
         }
 
+        // ফায়ারবেস থেকে রিয়্যালটাইমে প্রোডাক্ট লোড করার ফাংশন
         function loadProductsForCustomer(filterText = '') {
             productGrid.innerHTML = '';
-            const savedProducts = JSON.parse(localStorage.getItem('products')) || [];
             
-            savedProducts.forEach((product, index) => {
-                const searchString = `${product.name} ${product.material} ${product.price}`.toLowerCase();
-                let matchesCategory = selectedCategory === 'all' || product.material === selectedCategory;
-                let matchesSearch = filterText === '' || searchString.includes(filterText.toLowerCase());
+            if (window.db && window.databaseRef && window.get && window.child) {
+                window.get(window.child(window.databaseRef(window.db), 'products')).then((snapshot) => {
+                    if (snapshot.exists()) {
+                        const productsData = snapshot.val();
+                        Object.keys(productsData).forEach((key) => {
+                            const product = productsData[key];
+                            product.firebaseKey = key;
 
-                if (matchesCategory && matchesSearch) {
-                    addProductToDOM(product, index);
-                }
-            });
+                            const searchString = `${product.name} ${product.material} ${product.price}`.toLowerCase();
+                            let matchesCategory = selectedCategory === 'all' || product.material === selectedCategory;
+                            let matchesSearch = filterText === '' || searchString.includes(filterText.toLowerCase());
+
+                            if (matchesCategory && matchesSearch) {
+                                addProductToDOM(product, key);
+                            }
+                        });
+                    }
+                }).catch(() => {});
+            }
         }
 
         imageInput.addEventListener('change', function(e) {
@@ -1740,7 +1769,7 @@
             renderImagePreviews();
         }
 
-        function addProductToDOM(product, index) {
+        function addProductToDOM(product, firebaseKey) {
             const card = document.createElement('div');
             card.className = 'product-card';
             
@@ -1767,26 +1796,30 @@
         function loadAdminStockTable() {
             const tbody = document.getElementById('adminStockTableBody');
             tbody.innerHTML = '';
-            const savedProducts = JSON.parse(localStorage.getItem('products')) || [];
-
-            if(savedProducts.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="color: #7f8c8d;">${currentLang === 'en' ? 'No products found!' : 'কোনো পণ্য পাওয়া যায়নি!'}</td></tr>`;
-                return;
-            }
 
             if (window.db && window.databaseRef && window.get && window.child) {
-                window.get(window.child(window.databaseRef(window.db), 'orders')).then((snapshot) => {
-                    let allOrders = snapshot.exists() ? snapshot.val() : {};
-                    renderStockTableContent(savedProducts, allOrders, tbody);
+                window.get(window.child(window.databaseRef(window.db), 'products')).then((snapshot) => {
+                    let productsData = snapshot.exists() ? snapshot.val() : {};
+                    let productKeys = Object.keys(productsData);
+
+                    if(productKeys.length === 0) {
+                        tbody.innerHTML = `<tr><td colspan="7" style="color: #7f8c8d;">${currentLang === 'en' ? 'No products found!' : 'কোনো পণ্য পাওয়া যায়নি!'}</td></tr>`;
+                        return;
+                    }
+
+                    window.get(window.child(window.databaseRef(window.db), 'orders')).then((ordSnapshot) => {
+                        let allOrders = ordSnapshot.exists() ? ordSnapshot.val() : {};
+                        renderStockTableContent(productsData, productKeys, allOrders, tbody);
+                    }).catch(() => {
+                        renderStockTableContent(productsData, productKeys, {}, tbody);
+                    });
                 }).catch(() => {
-                    renderStockTableContent(savedProducts, {}, tbody);
+                    tbody.innerHTML = `<tr><td colspan="7" style="color: #e74c3c;">${currentLang === 'en' ? 'Failed to load data!' : 'ডেটা লোড করতে সমস্যা হয়েছে!'}</td></tr>`;
                 });
-            } else {
-                renderStockTableContent(savedProducts, {}, tbody);
             }
         }
 
-        function renderStockTableContent(savedProducts, allOrders, tbody) {
+        function renderStockTableContent(productsData, productKeys, allOrders, tbody) {
             let salesCountMap = {};
             Object.values(allOrders).forEach(order => {
                 if ((order.status === 'Delivered' || order.status === 'ডেলিভারি সম্পন্ন') && order.items) {
@@ -1796,7 +1829,8 @@
                 }
             });
 
-            savedProducts.forEach((product, index) => {
+            productKeys.forEach((key) => {
+                let product = productsData[key];
                 let soldQty = salesCountMap[product.name] || 0;
                 let tr = document.createElement('tr');
                 tr.innerHTML = `
@@ -1805,35 +1839,37 @@
                     <td>৳ ${product.price}</td>
                     <td><strong style="color: #27ae60; font-size: 15px;">${soldQty} ${currentLang === 'en' ? 'pcs' : 'টি'}</strong></td>
                     <td>
-                        <select onchange="updateProductStock(${index}, this.value)">
+                        <select onchange="updateProductStock('${key}', this.value)">
                             <option value="In Stock" ${product.stock === 'In Stock' || product.stock === 'ইন স্টক' ? 'selected' : ''}>${currentLang === 'en' ? 'In Stock' : 'ইন স্টক'}</option>
                             <option value="Out of Stock" ${product.stock === 'Out of Stock' || product.stock === 'স্টক আউট' ? 'selected' : ''}>${currentLang === 'en' ? 'Out of Stock' : 'স্টক আউট'}</option>
                         </select>
                     </td>
                     <td>
-                        <input type="text" value="${product.restockNote || ''}" placeholder="যেমন: ৩ দিন" onchange="updateRestockNote(${index}, this.value)" style="padding: 6px; width: 110px;">
+                        <input type="text" value="${product.restockNote || ''}" placeholder="যেমন: ৩ দিন" onchange="updateRestockNote('${key}', this.value)" style="padding: 6px; width: 110px;">
                     </td>
                     <td>
-                        <button onclick="deleteProduct(${index})" style="background: #e74c3c; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer;">${currentLang === 'en' ? 'Delete' : 'ডিলিট'}</button>
+                        <button onclick="deleteProduct('${key}')" style="background: #e74c3c; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer;">${currentLang === 'en' ? 'Delete' : 'ডিলিট'}</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        window.updateProductStock = function(index, stockValue) {
-            let savedProducts = JSON.parse(localStorage.getItem('products')) || [];
-            savedProducts[index].stock = stockValue;
-            localStorage.setItem('products', JSON.stringify(savedProducts));
-            loadProductsForCustomer(searchInput.value);
-            alert(currentLang === 'en' ? "Stock status updated!" : "স্টক স্ট্যাটাস আপডেট করা হয়েছে!");
+        window.updateProductStock = function(firebaseKey, stockValue) {
+            if (window.db && window.databaseRef && window.set) {
+                window.set(window.databaseRef(window.db, 'products/' + firebaseKey + '/stock'), stockValue).then(() => {
+                    loadProductsForCustomer(searchInput.value);
+                    alert(currentLang === 'en' ? "Stock status updated!" : "স্টক স্ট্যাটাস আপডেট করা হয়েছে!");
+                });
+            }
         }
 
-        window.updateRestockNote = function(index, noteValue) {
-            let savedProducts = JSON.parse(localStorage.getItem('products')) || [];
-            savedProducts[index].restockNote = noteValue;
-            localStorage.setItem('products', JSON.stringify(savedProducts));
-            loadProductsForCustomer(searchInput.value);
+        window.updateRestockNote = function(firebaseKey, noteValue) {
+            if (window.db && window.databaseRef && window.set) {
+                window.set(window.databaseRef(window.db, 'products/' + firebaseKey + '/restockNote'), noteValue).then(() => {
+                    loadProductsForCustomer(searchInput.value);
+                });
+            }
         }
 
         function loadAdminOrdersTable() {
@@ -1907,8 +1943,6 @@
                 }).catch(() => {
                     tbody.innerHTML = `<tr><td colspan="6" style="color: #e74c3c;">${currentLang === 'en' ? 'Failed to load data!' : 'ডেটা লোড করতে সমস্যা হয়েছে!'}</td></tr>`;
                 });
-            } else {
-                tbody.innerHTML = `<tr><td colspan="6" style="color: #e74c3c;">${currentLang === 'en' ? 'Firebase connection not found!' : 'ফায়ারবেস কানেকশন পাওয়া যায়নি!'}</td></tr>`;
             }
         }
 
@@ -1976,9 +2010,6 @@
                         alert(currentLang === 'en' ? "Order marked as delivered!" : "অর্ডারটি সফলভাবে ডেলিভারি হিসেবে আপডেট করা হয়েছে!");
                         loadAdminOrdersTable();
                         loadAdminStockTable();
-                    })
-                    .catch(() => {
-                        alert(currentLang === 'en' ? "Failed to update status!" : "স্ট্যাটাস আপডেট করতে সমস্যা হয়েছে!");
                     });
             }
         }
@@ -2001,9 +2032,6 @@
                             loadAdminOrdersTable();
                             loadAdminStockTable();
                             updateSalesAnalytics();
-                        })
-                        .catch(() => {
-                            alert(currentLang === 'en' ? "Failed to delete order!" : "অর্ডার ডিলিট করতে সমস্যা হয়েছে!");
                         });
                 }
             }
@@ -2185,13 +2213,14 @@
             renderCartPageItems();
         }
 
-        window.deleteProduct = function(index) {
+        window.deleteProduct = function(firebaseKey) {
             if (confirm(currentLang === 'en' ? "Are you sure you want to delete this product?" : "আপনি কি নিশ্চিতভাবে এই পণ্যটি মুছে ফেলতে চান?")) {
-                let savedProducts = JSON.parse(localStorage.getItem('products')) || [];
-                savedProducts.splice(index, 1);
-                localStorage.setItem('products', JSON.stringify(savedProducts));
-                loadProductsForCustomer(searchInput.value);
-                loadAdminStockTable();
+                if (window.db && window.databaseRef && window.set) {
+                    window.set(window.databaseRef(window.db, 'products/' + firebaseKey), null).then(() => {
+                        loadProductsForCustomer(searchInput.value);
+                        loadAdminStockTable();
+                    });
+                }
             }
         }
 
@@ -2200,6 +2229,7 @@
             loadProductsForCustomer(query);
         });
 
+        // প্রোডাক্ট ফায়ারবেসে সাবমিট করার কোড
         form.addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -2213,29 +2243,26 @@
                 return;
             }
 
-            let savedProducts = JSON.parse(localStorage.getItem('products')) || [];
-
             uploadedProductImages.forEach(imgSrc => {
                 const productObj = { name, price, material, stock, restockNote: '', imgSrc };
-                savedProducts.push(productObj);
+                if (window.db && window.databaseRef && window.push && window.set) {
+                    const newProductRef = window.push(window.databaseRef(window.db, 'products'));
+                    window.set(newProductRef, productObj);
+                }
             });
 
-            localStorage.setItem('products', JSON.stringify(savedProducts));
-
             searchInput.value = '';
-            loadProductsForCustomer();
-            loadAdminStockTable();
             form.reset();
             uploadedProductImages = [];
             renderImagePreviews();
             alert(currentLang === 'en' ? "New product(s) added successfully!" : "নতুন প্রোডাক্ট সফলভাবে যুক্ত হয়েছে!");
+            loadProductsForCustomer();
         });
     </script>
 
     <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
-      import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-analytics.js";
-      import { getDatabase, ref, set, get, child, push } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-database.js";
+      import { initializeApp } from "https://www.gstatic.com/s/firebasejs/11.0.0/firebase-app.js";
+      import { getDatabase, ref, set, get, child, push } from "https://www.gstatic.com/s/firebasejs/11.0.0/firebase-database.js";
 
       const firebaseConfig = {
         apiKey: "AIzaSyAifTcD-hqTE4PlkQcjHE6cJOdIA42h_lc",
@@ -2249,7 +2276,6 @@
       };
 
       const app = initializeApp(firebaseConfig);
-      const analytics = getAnalytics(app);
       const database = getDatabase(app);
       
       window.db = database;
@@ -2258,6 +2284,11 @@
       window.get = get;
       window.child = child;
       window.push = push;
+
+      // ফায়ারবেস ডেটাবেজ কানেক্ট হওয়ার পর পর স্বয়ংক্রিয়ভাবে প্রোডাক্টগুলো লোড করা
+      if (typeof loadProductsForCustomer === 'function') {
+          loadProductsForCustomer();
+      }
     </script>
 </body>
 </html>
