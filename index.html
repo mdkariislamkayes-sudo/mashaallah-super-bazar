@@ -996,7 +996,6 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             applyLanguage();
-            loadProductsForCustomer();
             updateCartUI();
             updateSalesAnalytics();
             updateAuthUI();
@@ -1600,7 +1599,6 @@
             if (titleClickCount === 3) {
                 closeStoreSettings();
                 
-                // ফায়ারবেস বা লোকাল স্টোরেজ থেকে অ্যাডমিন পিন চেক করা
                 if (window.db && window.databaseRef && window.get && window.child) {
                     window.get(window.child(window.databaseRef(window.db), 'settings/adminPin')).then((snapshot) => {
                         let savedPin = snapshot.exists() ? snapshot.val() : (localStorage.getItem('adminPin') || '1234');
@@ -1692,12 +1690,12 @@
             loadProductsForCustomer(searchInput.value);
         }
 
-        // ফায়ারবেস থেকে রিয়্যালটাইমে প্রোডাক্ট লোড করার ফাংশন
+        // ফায়ারবেস থেকে রিয়্যালটাইম ডেটা সিঙ্ক ও লোড করার ফাংশন
         function loadProductsForCustomer(filterText = '') {
-            productGrid.innerHTML = '';
-            
-            if (window.db && window.databaseRef && window.get && window.child) {
-                window.get(window.child(window.databaseRef(window.db), 'products')).then((snapshot) => {
+            if (window.db && window.databaseRef && window.onValue) {
+                const productsRef = window.databaseRef(window.db, 'products');
+                window.onValue(productsRef, (snapshot) => {
+                    productGrid.innerHTML = '';
                     if (snapshot.exists()) {
                         const productsData = snapshot.val();
                         Object.keys(productsData).forEach((key) => {
@@ -1712,8 +1710,10 @@
                                 addProductToDOM(product, key);
                             }
                         });
+                    } else {
+                        productGrid.innerHTML = `<p style="text-align: center; color: #7f8c8d; grid-column: 1 / -1; padding: 20px;">${currentLang === 'en' ? 'No products found!' : 'কোনো পণ্য পাওয়া যায়নি!'}</p>`;
                     }
-                }).catch(() => {});
+                });
             }
         }
 
@@ -1858,7 +1858,6 @@
         window.updateProductStock = function(firebaseKey, stockValue) {
             if (window.db && window.databaseRef && window.set) {
                 window.set(window.databaseRef(window.db, 'products/' + firebaseKey + '/stock'), stockValue).then(() => {
-                    loadProductsForCustomer(searchInput.value);
                     alert(currentLang === 'en' ? "Stock status updated!" : "স্টক স্ট্যাটাস আপডেট করা হয়েছে!");
                 });
             }
@@ -1866,9 +1865,7 @@
 
         window.updateRestockNote = function(firebaseKey, noteValue) {
             if (window.db && window.databaseRef && window.set) {
-                window.set(window.databaseRef(window.db, 'products/' + firebaseKey + '/restockNote'), noteValue).then(() => {
-                    loadProductsForCustomer(searchInput.value);
-                });
+                window.set(window.databaseRef(window.db, 'products/' + firebaseKey + '/restockNote'), noteValue);
             }
         }
 
@@ -2217,7 +2214,6 @@
             if (confirm(currentLang === 'en' ? "Are you sure you want to delete this product?" : "আপনি কি নিশ্চিতভাবে এই পণ্যটি মুছে ফেলতে চান?")) {
                 if (window.db && window.databaseRef && window.set) {
                     window.set(window.databaseRef(window.db, 'products/' + firebaseKey), null).then(() => {
-                        loadProductsForCustomer(searchInput.value);
                         loadAdminStockTable();
                     });
                 }
@@ -2229,7 +2225,6 @@
             loadProductsForCustomer(query);
         });
 
-        // প্রোডাক্ট ফায়ারবেসে সাবমিট করার কোড
         form.addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -2256,13 +2251,12 @@
             uploadedProductImages = [];
             renderImagePreviews();
             alert(currentLang === 'en' ? "New product(s) added successfully!" : "নতুন প্রোডাক্ট সফলভাবে যুক্ত হয়েছে!");
-            loadProductsForCustomer();
         });
     </script>
 
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/s/firebasejs/11.0.0/firebase-app.js";
-      import { getDatabase, ref, set, get, child, push } from "https://www.gstatic.com/s/firebasejs/11.0.0/firebase-database.js";
+      import { getDatabase, ref, set, get, child, push, onValue } from "https://www.gstatic.com/s/firebasejs/11.0.0/firebase-database.js";
 
       const firebaseConfig = {
         apiKey: "AIzaSyAifTcD-hqTE4PlkQcjHE6cJOdIA42h_lc",
@@ -2284,8 +2278,9 @@
       window.get = get;
       window.child = child;
       window.push = push;
+      window.onValue = onValue;
 
-      // ফায়ারবেস ডেটাবেজ কানেক্ট হওয়ার পর পর স্বয়ংক্রিয়ভাবে প্রোডাক্টগুলো লোড করা
+      // পেজ লোড হওয়ার সাথে সাথেই ডেটাবেজ কানেক্ট করে লাইভ প্রোডাক্ট ফেচ করা শুরু করবে
       if (typeof loadProductsForCustomer === 'function') {
           loadProductsForCustomer();
       }
