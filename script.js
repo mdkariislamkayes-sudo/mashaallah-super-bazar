@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadProductsRealtime();
     if (currentUser) setupOrdersRealtimeListener();
 
-    // 🌟 ৩০ সেকেন্ড পরপর প্রোডাক্টগুলোর পজিশন এলোমেলোভাবে (ডানে-বামে, উপরে-নিচে) পরিবর্তন করার টাইমার
+    // ৩০ সেকেন্ড পরপর প্রোডাক্টগুলোর পজিশন এলোমেলোভাবে পরিবর্তন করার টাইমার
     setInterval(() => {
         if (globalProducts.length > 1 && customerShopSection.style.display !== 'none' && adminPanel.style.display === 'none') {
             shuffleProductsAndRender();
@@ -137,7 +137,6 @@ window.switchPage = function(pageName) {
     ordersPageSection.style.display = 'none';
     adminPanel.style.display = 'none';
 
-    // অ্যাডমিন প্যানেল বা অন্য পেজে গেলে হেডার ও ব্যানার পুনরায় দৃশ্যমান করা
     const topNavbar = document.querySelector('.top-header-navbar');
     const mainBanner = document.querySelector('.main-header-banner-container');
     if(topNavbar) topNavbar.style.display = 'flex';
@@ -893,7 +892,6 @@ function promptForPin(correctPin) {
         cartPageSection.style.display = 'none';
         ordersPageSection.style.display = 'none';
         
-        // 🌟 অ্যাডমিন প্যানেলে ঢুকলে হেডার ও ব্যানার লুকানোর জন্য
         const topNavbar = document.querySelector('.top-header-navbar');
         const mainBanner = document.querySelector('.main-header-banner-container');
         if(topNavbar) topNavbar.style.display = 'none';
@@ -1163,6 +1161,21 @@ window.updateProductStock = function(firebaseKey, stockValue) {
 window.updateRestockNote = function(firebaseKey, noteValue) {
     if (window.db && window.databaseRef && window.set) {
         window.set(window.databaseRef(window.db, 'products/' + firebaseKey + '/restockNote'), noteValue);
+    }
+}
+
+/* 🌟 ফায়ারবেস থেকে প্রোডাক্ট ডিলিট করার ফাংশন (নতুন যুক্ত করা হয়েছে) */
+window.deleteProduct = function(firebaseKey) {
+    if (confirm(currentLang === 'en' ? "Are you sure you want to delete this product?" : "আপনি কি নিশ্চিতভাবে এই প্রোডাক্টটি ডিলিট করতে চান?")) {
+        if (window.db && window.databaseRef && window.set) {
+            window.set(window.databaseRef(window.db, 'products/' + firebaseKey), null).then(() => {
+                alert(currentLang === 'en' ? "Product deleted successfully!" : "প্রোডাক্টটি সফলভাবে ডিলিট করা হয়েছে!");
+                loadAdminStockTable();
+            }).catch((err) => {
+                console.error(err);
+                alert(currentLang === 'en' ? "Failed to delete product!" : "প্রোডাক্ট ডিলিট করতে ব্যর্থ হয়েছে!");
+            });
+        }
     }
 }
 
