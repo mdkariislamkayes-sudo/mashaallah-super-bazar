@@ -1,4 +1,4 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
+ import { initializeApp } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-analytics.js";
 import { getDatabase, ref, set, get, child, push, onValue } from "https://www.gstatic.com/firebasejs/13.2.0/firebase-database.js";
 
@@ -60,17 +60,17 @@ let currentLang = localStorage.getItem('siteLang') || 'bn';
 let cart = currentUser ? (JSON.parse(localStorage.getItem('cart_' + currentUser.email)) || []) : (JSON.parse(localStorage.getItem('cart')) || []);
 let orders = [];
 
+// 🌟 ইনস্ট্যান্ট ক্যাশ লোড ও স্পিনার হাইড নিশ্চিতকরণ
 let globalProducts = JSON.parse(localStorage.getItem('cached_products')) || [];
 if (globalProducts.length > 0) {
-    loadingSpinnerContainer.style.display = 'none';
-    productGrid.style.display = 'grid';
-    renderProductsToDOM(globalProducts, '');
+    if (loadingSpinnerContainer) loadingSpinnerContainer.style.display = 'none';
+    if (productGrid) productGrid.style.display = 'grid';
 }
 
 let cachedOrders = currentUser ? (JSON.parse(localStorage.getItem('cached_orders_' + currentUser.email)) || []) : [];
 if (cachedOrders.length > 0) {
-    ordersLoadingSpinner.style.display = 'none';
-    customerActiveOrdersContainer.style.display = 'block';
+    if (ordersLoadingSpinner) ordersLoadingSpinner.style.display = 'none';
+    if (customerActiveOrdersContainer) customerActiveOrdersContainer.style.display = 'block';
     renderOrdersToDOM(cachedOrders);
 }
 
@@ -83,10 +83,17 @@ document.addEventListener('DOMContentLoaded', function() {
     updateCartUI();
     updateAuthUI();
     setInterval(updateCountdowns, 1000);
+    
+    // যদি ক্যাশ ডেটা থাকে, সাথে সাথে রেন্ডার করে স্পিনার চিরতরে বন্ধ রাখব
+    if (globalProducts.length > 0) {
+        if (loadingSpinnerContainer) loadingSpinnerContainer.style.display = 'none';
+        if (productGrid) productGrid.style.display = 'grid';
+        renderProductsToDOM(globalProducts, '');
+    }
+
     loadProductsRealtime();
     if (currentUser) setupOrdersRealtimeListener();
 
-    // ৩০ সেকেন্ড পরপর প্রোডাক্টগুলোর পজিশন এলোমেলোভাবে পরিবর্তন করার টাইমার
     setInterval(() => {
         if (globalProducts.length > 1 && customerShopSection.style.display !== 'none' && adminPanel.style.display === 'none') {
             shuffleProductsAndRender();
@@ -120,13 +127,16 @@ window.selectDrawerCategory = function(categoryName) {
     
     document.querySelectorAll('.home-cat-card').forEach(card => card.classList.remove('active'));
     
-    loadingSpinnerContainer.style.display = 'block';
-    productGrid.style.display = 'none';
+    // ক্যাশ থাকলে এখানে আর স্পিনার দেখানোর কোনো দরকার নেই
+    if (globalProducts.length === 0) {
+        if (loadingSpinnerContainer) loadingSpinnerContainer.style.display = 'block';
+        if (productGrid) productGrid.style.display = 'none';
+    } else {
+        if (loadingSpinnerContainer) loadingSpinnerContainer.style.display = 'none';
+        if (productGrid) productGrid.style.display = 'grid';
+    }
     
-    setTimeout(() => {
-        renderProductsToDOM(globalProducts, searchInput.value);
-    }, 150);
-
+    renderProductsToDOM(globalProducts, searchInput.value);
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -149,6 +159,13 @@ window.switchPage = function(pageName) {
         customerShopSection.style.display = 'block';
         let homeBtn = document.getElementById('navHomeBtn');
         if(homeBtn) homeBtn.classList.add('active');
+
+        // হোমে আসলে যদি ক্যাশ ডেটা থাকে, নিশ্চিতভাবে স্পিনার হাইড করে গ্রিড দেখাবে
+        if (globalProducts.length > 0) {
+            if (loadingSpinnerContainer) loadingSpinnerContainer.style.display = 'none';
+            if (productGrid) productGrid.style.display = 'grid';
+            renderProductsToDOM(globalProducts, searchInput ? searchInput.value : '');
+        }
     } else if (pageName === 'categories') {
         categoriesPageSection.style.display = 'block';
         let catBtn = document.getElementById('navCategoryBtn');
@@ -968,8 +985,13 @@ window.filterByCategory = function(category, cardElement) {
     if(cardElement) cardElement.classList.add('active');
     
     window.switchPage('shop');
-    loadingSpinnerContainer.style.display = 'block';
-    productGrid.style.display = 'none';
+    if (globalProducts.length === 0) {
+        if (loadingSpinnerContainer) loadingSpinnerContainer.style.display = 'block';
+        if (productGrid) productGrid.style.display = 'none';
+    } else {
+        if (loadingSpinnerContainer) loadingSpinnerContainer.style.display = 'none';
+        if (productGrid) productGrid.style.display = 'grid';
+    }
 
     setTimeout(() => {
         renderProductsToDOM(globalProducts, searchInput.value);
@@ -977,26 +999,41 @@ window.filterByCategory = function(category, cardElement) {
 }
 
 function loadProductsRealtime() {
+    let cached = JSON.parse(localStorage.getItem('cached_products')) || [];
+    if (cached.length > 0) {
+        if (loadingSpinnerContainer) loadingSpinnerContainer.style.display = 'none';
+        if (productGrid) productGrid.style.display = 'grid';
+        globalProducts = cached;
+        renderProductsToDOM(globalProducts, searchInput ? searchInput.value : '');
+    }
+
     if (window.db && window.databaseRef && window.onValue) {
         window.onValue(window.databaseRef(window.db, 'products'), (snapshot) => {
-            globalProducts = [];
+            let fetchedProducts = [];
             if (snapshot.exists()) {
                 let data = snapshot.val();
                 Object.keys(data).forEach(key => {
-                    globalProducts.push({ ...data[key], firebaseKey: key });
+                    fetchedProducts.push({ ...data[key], firebaseKey: key });
                 });
             }
+            globalProducts = fetchedProducts;
             localStorage.setItem('cached_products', JSON.stringify(globalProducts));
-            loadingSpinnerContainer.style.display = 'none';
-            productGrid.style.display = 'grid';
-            renderProductsToDOM(globalProducts, searchInput.value);
+            
+            if (loadingSpinnerContainer) loadingSpinnerContainer.style.display = 'none';
+            if (productGrid) productGrid.style.display = 'grid';
+            renderProductsToDOM(globalProducts, searchInput ? searchInput.value : '');
+        }, (error) => {
+            console.error("Firebase fetch error:", error);
+            if (loadingSpinnerContainer) loadingSpinnerContainer.style.display = 'none';
+            if (productGrid) productGrid.style.display = 'grid';
+            renderProductsToDOM(globalProducts, searchInput ? searchInput.value : '');
         });
     } else {
         let saved = JSON.parse(localStorage.getItem('cached_products')) || [];
         globalProducts = saved;
-        loadingSpinnerContainer.style.display = 'none';
-        productGrid.style.display = 'grid';
-        renderProductsToDOM(globalProducts, searchInput.value);
+        if (loadingSpinnerContainer) loadingSpinnerContainer.style.display = 'none';
+        if (productGrid) productGrid.style.display = 'grid';
+        renderProductsToDOM(globalProducts, searchInput ? searchInput.value : '');
     }
 }
 
@@ -1010,8 +1047,8 @@ function renderProductsToDOM(productsList, filterText = '') {
         return matchesCategory && matchesSearch;
     });
 
-    loadingSpinnerContainer.style.display = 'none';
-    productGrid.style.display = 'grid';
+    if (loadingSpinnerContainer) loadingSpinnerContainer.style.display = 'none';
+    if (productGrid) productGrid.style.display = 'grid';
 
     if (filtered.length === 0) {
         productGrid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #7f8c8d; padding: 20px;">${currentLang === 'en' ? 'No products found!' : 'কোনো পণ্য পাওয়া যায়নি!'}</p>`;
@@ -1164,7 +1201,6 @@ window.updateRestockNote = function(firebaseKey, noteValue) {
     }
 }
 
-/* 🌟 ফায়ারবেস থেকে প্রোডাক্ট ডিলিট করার ফাংশন (নতুন যুক্ত করা হয়েছে) */
 window.deleteProduct = function(firebaseKey) {
     if (confirm(currentLang === 'en' ? "Are you sure you want to delete this product?" : "আপনি কি নিশ্চিতভাবে এই প্রোডাক্টটি ডিলিট করতে চান?")) {
         if (window.db && window.databaseRef && window.set) {
